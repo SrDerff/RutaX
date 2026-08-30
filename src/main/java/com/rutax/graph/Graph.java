@@ -34,7 +34,7 @@ public class Graph {
 
             System.out.println(loq.getName());
 
-            List<Road> roads = adjList.get(loq);
+            List<Road> roads = this.adjList.get(loq);
 
             for(int i = roads.size() - 1; i >= 0; i--){
                 Location next = roads.get(i).getTo();
@@ -58,7 +58,7 @@ public class Graph {
             Location loq = deq.pop();
             System.out.println(loq.getName());
 
-            for(Road _road : adjList.get(loq)){
+            for(Road _road : this.adjList.get(loq)){
                 if(!visited.contains(_road.getTo())){
                     visited.add(_road.getTo());
                     deq.addLast(_road.getTo());
@@ -67,5 +67,11 @@ public class Graph {
         }
     }
 
-    public int getSize() { return vertices.size(); }
+    public int getSize() { return this.vertices.size(); }
+
+    public List<Road> getNeighbours(Location loq){
+        return this.adjList.get(loq);
+    }
+
+    public Location getLocation(int _id){ return this.vertices.get(_id); }
 }
