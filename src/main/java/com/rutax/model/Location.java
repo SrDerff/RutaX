@@ -11,4 +11,21 @@ public class Location {
 
     public int getId(){ return this.id; }
     public String getName(){ return this.name; }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this==obj) return true;
+
+        if(obj == null || getClass() != obj.getClass()) return false;
+
+        Location loq = (Location) obj;
+
+        return id==(loq.getId());
+    }
+
+    @Override
+    public int hashCode(){
+        return Integer.hashCode(this.id);
+    }
+
 }

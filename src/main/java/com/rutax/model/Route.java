@@ -10,7 +10,7 @@ public class Route {
 
     public Route(int _id, List<Location>_route, double _totalDist){
         this.id=_id;
-        this.route=new ArrayList<>();
+        this.route=_route;
         this.totalDistance=_totalDist;
     }
 
