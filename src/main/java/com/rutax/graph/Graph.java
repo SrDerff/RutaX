@@ -22,17 +22,23 @@ public class Graph {
         this.adjList.get(_road.getFrom()).add(_road);
     }
 
-    public void DFS(Location start){
+    public List<Location> DFS(Location start){
+        if(start == null){
+            throw new LocationNotFoundException("The starting point doesn't exist.");
+        }
         Set<Location> visited = new HashSet<Location>();
         Deque<Location> deq = new ArrayDeque<Location>();
 
+        List<Location> order = new ArrayList<>();
         deq.push(start);
         visited.add(start);
+        order.add(start);
 
         while(!deq.isEmpty()){
             Location loq = deq.pop();
 
-            System.out.println(loq.getName());
+            //replaced by adding it to the order list
+            //System.out.println(loq.getName());
 
             List<Road> roads = this.adjList.get(loq);
 
@@ -41,18 +47,27 @@ public class Graph {
 
                 if(!visited.contains(next)){
                     visited.add(next);
+                    order.add(next);
                     deq.push(next);
                 }
             }
         }
+
+        return order;
     }
 
-    public void BFS(Location start){
+    public List<Location> BFS(Location start){
+        if(start == null){
+            throw new LocationNotFoundException("The starting point doesn't exist.");
+        }
         Set<Location> visited = new HashSet<Location>();
         Deque<Location> deq = new ArrayDeque<Location>();
 
+        List<Location> order = new ArrayList<>();
+
         deq.push(start);
         visited.add(start);
+        order.add(start);
 
         while(!deq.isEmpty()){
             Location loq = deq.pop();
@@ -61,10 +76,13 @@ public class Graph {
             for(Road _road : this.adjList.get(loq)){
                 if(!visited.contains(_road.getTo())){
                     visited.add(_road.getTo());
+                    order.add(_road.getTo());
                     deq.addLast(_road.getTo());
                 }
             }
         }
+
+        return order;
     }
 
     public int getSize() { return this.vertices.size(); }
