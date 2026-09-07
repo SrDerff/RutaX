@@ -85,6 +85,48 @@ public class Graph {
         return order;
     }
 
+    public List<Location> findPathBFS(Location start, Location end){
+        if(start == null || !vertices.containsKey(start.getId()))
+            throw new LocationNotFoundException("The starting point doesn't exist");
+        if(end == null || !vertices.containsKey(end.getId()))
+            throw new LocationNotFoundException("The ending point doesn't exist");
+
+        List<Location> path = new ArrayList<>();
+        Map<Location, Location> predecessors = new HashMap<>();
+
+        Set<Location> visited = new HashSet<>();
+        Deque<Location> dq = new ArrayDeque<>();
+
+        dq.addLast(start);
+        visited.add(start);
+        predecessors.put(start, null);
+
+        while(!dq.isEmpty()){
+            Location loq = dq.removeFirst();
+
+            if(loq.equals(end)) break;
+
+            for(Road _road : adjList.get(loq)){
+                if(!visited.contains(_road.getTo())){
+                    predecessors.put(_road.getTo(), loq);
+                    visited.add(_road.getTo());
+                    dq.addLast(_road.getTo());
+                }
+            }
+        }
+
+        if(!predecessors.containsKey(end))
+            return path;
+
+        path.add(end);
+        while(predecessors.get(end)!=null){
+            path.add(predecessors.get(end));
+            end=predecessors.get(end);
+        }
+        Collections.reverse(path);
+        return path;
+    }
+
     public int getSize() { return this.vertices.size(); }
 
     public List<Road> getNeighbours(Location loq){
