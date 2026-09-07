@@ -23,7 +23,7 @@ public class Graph {
     }
 
     public List<Location> DFS(Location start){
-        if(start == null){
+        if(start == null || !vertices.containsKey(start.getId())){
             throw new LocationNotFoundException("The starting point doesn't exist.");
         }
         Set<Location> visited = new HashSet<Location>();
@@ -32,10 +32,10 @@ public class Graph {
         List<Location> order = new ArrayList<>();
         deq.push(start);
         visited.add(start);
-        order.add(start);
 
         while(!deq.isEmpty()){
             Location loq = deq.pop();
+            order.add(loq);
 
             //replaced by adding it to the order list
             //System.out.println(loq.getName());
@@ -47,7 +47,6 @@ public class Graph {
 
                 if(!visited.contains(next)){
                     visited.add(next);
-                    order.add(next);
                     deq.push(next);
                 }
             }
@@ -57,7 +56,7 @@ public class Graph {
     }
 
     public List<Location> BFS(Location start){
-        if(start == null){
+        if(start == null || !vertices.containsKey(start.getId())){
             throw new LocationNotFoundException("The starting point doesn't exist.");
         }
         Set<Location> visited = new HashSet<Location>();
@@ -71,7 +70,8 @@ public class Graph {
 
         while(!deq.isEmpty()){
             Location loq = deq.pop();
-            System.out.println(loq.getName());
+            //replaced by adding it to the order list
+            //System.out.println(loq.getName());
 
             for(Road _road : this.adjList.get(loq)){
                 if(!visited.contains(_road.getTo())){
