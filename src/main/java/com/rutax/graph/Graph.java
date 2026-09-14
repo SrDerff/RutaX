@@ -85,10 +85,10 @@ public class Graph {
         return order;
     }
 
-    public List<Location> findPathBFS(Location start, Location end){
-        if(start == null || !vertices.containsKey(start.getId()))
+    public List<Location> findPathBFS(Location start, Location end) {
+        if (start == null || !vertices.containsKey(start.getId()))
             throw new LocationNotFoundException("The starting point doesn't exist");
-        if(end == null || !vertices.containsKey(end.getId()))
+        if (end == null || !vertices.containsKey(end.getId()))
             throw new LocationNotFoundException("The ending point doesn't exist");
 
         List<Location> path = new ArrayList<>();
@@ -101,13 +101,13 @@ public class Graph {
         visited.add(start);
         predecessors.put(start, null);
 
-        while(!dq.isEmpty()){
+        while (!dq.isEmpty()) {
             Location loq = dq.removeFirst();
 
-            if(loq.equals(end)) break;
+            if (loq.equals(end)) break;
 
-            for(Road _road : adjList.get(loq)){
-                if(!visited.contains(_road.getTo())){
+            for (Road _road : adjList.get(loq)) {
+                if (!visited.contains(_road.getTo())) {
                     predecessors.put(_road.getTo(), loq);
                     visited.add(_road.getTo());
                     dq.addLast(_road.getTo());
@@ -115,13 +115,13 @@ public class Graph {
             }
         }
 
-        if(!predecessors.containsKey(end))
+        if (!predecessors.containsKey(end))
             return path;
 
         path.add(end);
-        while(predecessors.get(end)!=null){
+        while (predecessors.get(end) != null) {
             path.add(predecessors.get(end));
-            end=predecessors.get(end);
+            end = predecessors.get(end);
         }
         Collections.reverse(path);
         return path;
