@@ -115,16 +115,62 @@ public class Graph {
             }
         }
 
+        return reconstructPath(end, predecessors);
+    }
+
+    private List<Location> reconstructPath(Location end, Map<Location, Location> predecessors) {
+        List<Location> path = new ArrayList<>();
         if (!predecessors.containsKey(end))
             return path;
 
         path.add(end);
-        while (predecessors.get(end) != null) {
-            path.add(predecessors.get(end));
-            end = predecessors.get(end);
+        Location current = end;
+        while (predecessors.get(current) != null) {
+            current = predecessors.get(current);
+            path.add(current);
         }
         Collections.reverse(path);
         return path;
+    }
+
+    private record PQEntry(Location loc, double dist) {}
+
+    public List<Location> dijkstra(Location start, Location end) {
+        if (start == null || !vertices.containsKey(start.getId()))
+            throw new LocationNotFoundException("The starting point doesn't exist");
+        if (end == null || !vertices.containsKey(end.getId()))
+            throw new LocationNotFoundException("The ending point doesn't exist");
+
+        Map<Location, Double> dist = new HashMap<>();
+        for (Location v : vertices.values())
+            dist.put(v, Double.MAX_VALUE);
+        dist.put(start, 0.0);
+
+        Map<Location, Location> predecessors = new HashMap<>();
+        predecessors.put(start, null);
+
+        PriorityQueue<PQEntry> pq = new PriorityQueue<>(Comparator.comparingDouble(PQEntry::dist));
+        pq.add(new PQEntry(start, 0.0));
+
+        while (!pq.isEmpty()) {
+            PQEntry entry = pq.poll();
+            Location u = entry.loc();
+            if (entry.dist() > dist.get(u)) continue;
+
+            if (u.equals(end)) break;
+
+            for (Road _road : adjList.get(u)) {
+                Location v = _road.getTo();
+                double newDist = dist.get(u) + _road.getDistance();
+                if (newDist < dist.get(v)) {
+                    dist.put(v, newDist);
+                    predecessors.put(v, u);
+                    pq.add(new PQEntry(v, newDist));
+                }
+            }
+        }
+
+        return reconstructPath(end, predecessors);
     }
 
     public int getSize() { return this.vertices.size(); }
