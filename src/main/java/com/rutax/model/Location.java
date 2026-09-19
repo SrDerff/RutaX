@@ -20,12 +20,12 @@ public class Location {
 
         Location loq = (Location) obj;
 
-        return id==(loq.getId());
+        return this.name.equals(loq.getName());
     }
 
     @Override
     public int hashCode(){
-        return Integer.hashCode(this.id);
+        return name.hashCode();
     }
 
 }

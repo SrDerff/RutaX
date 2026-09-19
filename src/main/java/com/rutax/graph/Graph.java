@@ -6,16 +6,27 @@ import java.util.*;
 
 public class Graph {
     private final Map<Location, List<Road>> adjList;
-    private final Map<Integer, Location> vertices;
+    private final Map<String, Location> vertices;
 
     public Graph(){
-        this.vertices=new HashMap<Integer, Location>();
+        this.vertices=new HashMap<String, Location>();
         this.adjList=new HashMap<Location, List<Road>>();
     }
 
     public void addVertex(Location _place){
-        this.vertices.put(_place.getId(), _place);
+        this.vertices.put(_place.getName(), _place);
         this.adjList.put(_place, new LinkedList<Road>());
+    }
+
+    public List<Location> getAllLocations(){
+        List<Location> all = new ArrayList<>(vertices.values());
+        all.sort(Comparator.comparingInt(Location::getId));
+        return all;
+    }
+
+    public List<Location> getAllNodes(){
+        List<Location> nodes= new ArrayList<>(vertices.values());
+        return nodes;
     }
 
     public void addEdge(Road _road){
@@ -23,7 +34,7 @@ public class Graph {
     }
 
     public List<Location> DFS(Location start){
-        if(start == null || !vertices.containsKey(start.getId())){
+        if(start == null || !vertices.containsKey(start.getName())){
             throw new LocationNotFoundException("The starting point doesn't exist.");
         }
         Set<Location> visited = new HashSet<Location>();
@@ -56,7 +67,7 @@ public class Graph {
     }
 
     public List<Location> BFS(Location start){
-        if(start == null || !vertices.containsKey(start.getId())){
+        if(start == null || !vertices.containsKey(start.getName())){
             throw new LocationNotFoundException("The starting point doesn't exist.");
         }
         Set<Location> visited = new HashSet<Location>();
@@ -86,9 +97,9 @@ public class Graph {
     }
 
     public List<Location> findPathBFS(Location start, Location end) {
-        if (start == null || !vertices.containsKey(start.getId()))
+        if (start == null || !vertices.containsKey(start.getName()))
             throw new LocationNotFoundException("The starting point doesn't exist");
-        if (end == null || !vertices.containsKey(end.getId()))
+        if (end == null || !vertices.containsKey(end.getName()))
             throw new LocationNotFoundException("The ending point doesn't exist");
 
         List<Location> path = new ArrayList<>();
@@ -136,9 +147,9 @@ public class Graph {
     private record PQEntry(Location loc, double dist) {}
 
     public List<Location> dijkstra(Location start, Location end) {
-        if (start == null || !vertices.containsKey(start.getId()))
+        if (start == null || !vertices.containsKey(start.getName()))
             throw new LocationNotFoundException("The starting point doesn't exist");
-        if (end == null || !vertices.containsKey(end.getId()))
+        if (end == null || !vertices.containsKey(end.getName()))
             throw new LocationNotFoundException("The ending point doesn't exist");
 
         Map<Location, Double> dist = new HashMap<>();
@@ -179,5 +190,5 @@ public class Graph {
         return this.adjList.get(loq);
     }
 
-    public Location getLocation(int _id){ return this.vertices.get(_id); }
+    public Location getLocation(String _name){ return this.vertices.get(_name); }
 }
