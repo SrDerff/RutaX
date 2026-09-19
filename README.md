@@ -50,7 +50,7 @@ The demo network connects five Peruvian cities with six one-way roads:
 ### Build and run
 
 ```bash
-git clone https://github.com/<your-username>/RutaX.git
+git clone https://github.com/SrDerff/RutaX.git
 cd RutaX
 
 # compile
